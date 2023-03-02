@@ -48,7 +48,7 @@ while True:
 
     [pygame.draw.rect(screen, pygame.Color('brown'), block) for color, block in enumerate(block_list)]
     pygame.draw.circle(screen, pygame.Color('darkgray'), ball.center, ball_radius)
-    pygame.draw.rect(screen, pygame.Color('darkgray'), paddle)
+    pygame.draw.rect(screen, pygame.Color('darkorange'), paddle)
 
     ball.x += ball_speed * dx
     ball.y += ball_speed * dy
