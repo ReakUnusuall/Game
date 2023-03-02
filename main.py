@@ -2,7 +2,7 @@ import pygame
 from random import randrange as rnd
 
 WIDTH, HEIGHT = 1400, 800
-fps = 30
+fps = 74
 
 paddle_w = 250
 paddle_h = 30
@@ -10,7 +10,7 @@ paddle_speed = 15
 paddle = pygame.Rect(WIDTH // 2 - paddle_w // 2, HEIGHT - paddle_h - 10, paddle_w, paddle_h)
 
 ball_radius = 19
-ball_speed = 6
+ball_speed = 5
 ball_rect = int(ball_radius * 2 ** 0.5)
 ball = pygame.Rect(rnd(ball_rect, WIDTH - ball_rect), HEIGHT // 2, ball_rect, ball_rect)
 dx, dy = 1, -1
@@ -21,6 +21,8 @@ pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 img = pygame.image.load('1.jpg').convert()
+
+pygame.display.set_caption('Игра')
 
 def detect_collision(dx, dy, ball, rect):
     if dx > 0:
@@ -66,19 +68,23 @@ while True:
     if hit_index != -1:
         hit_rect = block_list.pop(hit_index)
         dx, dy = detect_collision(dx, dy, ball, hit_rect)
-    
+
     if ball.bottom > HEIGHT:
-        print('Поражение')
-        exit()
+        clock = pygame.time.Clock()
+        screen = pygame.display.set_mode((1280, 720))
+        img = pygame.image.load('21.jpg').convert()
+        screen.blit(img, (0, 0))
     elif not len(block_list):
-        print('Победа')
-        exit()
+        clock = pygame.time.Clock()
+        screen = pygame.display.set_mode((1280, 1024))
+        img = pygame.image.load('31.jpg').convert()
+        screen.blit(img, (0, 0))
     
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT] and paddle.left > 0:
         paddle.left -= paddle_speed
     if key[pygame.K_RIGHT] and paddle.right < WIDTH:
         paddle.right += paddle_speed
-    
+
     pygame.display.flip()
     clock.tick(fps)
