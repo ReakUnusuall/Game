@@ -1,8 +1,8 @@
 import pygame
 from random import randrange as rnd
 
-WIDTH, HEIGHT = 1400, 900
-fps = 60
+WIDTH, HEIGHT = 1400, 800
+fps = 30
 
 paddle_w = 250
 paddle_h = 30
@@ -10,16 +10,15 @@ paddle_speed = 15
 paddle = pygame.Rect(WIDTH // 2 - paddle_w // 2, HEIGHT - paddle_h - 10, paddle_w, paddle_h)
 
 ball_radius = 19
-ball_speed = 1
+ball_speed = 6
 ball_rect = int(ball_radius * 2 ** 0.5)
 ball = pygame.Rect(rnd(ball_rect, WIDTH - ball_rect), HEIGHT // 2, ball_rect, ball_rect)
 dx, dy = 1, -1
 
 block_list = [pygame.Rect(10 + 140 * i, 10 + 80 * j, 125, 68) for i in range(10) for j in range(4)]
-сolor_list = [(rnd(90, 93), rnd(90, 92), rnd(90, 91)) for i in range(10) for j in range(4)]
 
 pygame.init()
-sc = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 img = pygame.image.load('1.jpg').convert()
 
@@ -45,10 +44,11 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-    sc.blit(img, (0, 0))
-    [pygame.draw.rect(sc, color_list[color], block) for color, block in enumerate(block_list)]
-    pygame.draw.rect(sc, pygame.Color('blue'), paddle)
-    pygame.draw.circle(sc, pygame.Color('orange'), ball.center, ball_radius)
+    screen.blit(img, (0, 0))
+
+    [pygame.draw.rect(screen, pygame.Color('brown'), block) for color, block in enumerate(block_list)]
+    pygame.draw.circle(screen, pygame.Color('darkgray'), ball.center, ball_radius)
+    pygame.draw.rect(screen, pygame.Color('darkgray'), paddle)
 
     ball.x += ball_speed * dx
     ball.y += ball_speed * dy
@@ -65,7 +65,6 @@ while True:
     hit_index = ball.collidelist(block_list)
     if hit_index != -1:
         hit_rect = block_list.pop(hit_index)
-        hit_color = color_list.pop(hit_index)
         dx, dy = detect_collision(dx, dy, ball, hit_rect)
     
     if ball.bottom > HEIGHT:
